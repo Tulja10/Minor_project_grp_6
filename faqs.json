@@ -1,0 +1,150 @@
+[
+  {
+    "id": "infra1",
+    "question": "Where is the reception located?",
+    "answer": "Reception is located on the ground floor of Block 1.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra2",
+    "question": "Where is the transport office?",
+    "answer": "The transport office is located at the backside of Block 1.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra3",
+    "question": "Where is the library?",
+    "answer": "The library is located on the first floor of Block 1.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra4",
+    "question": "Where are the first-year classes held?",
+    "answer": "For CSE and IT: Block 1, 1st floor. For AIML and EC: Block 1, 2nd floor.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra5",
+    "question": "Where is the medical room?",
+    "answer": "Medical room is located in Block 1, 1st floor near Civil Department.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra6",
+    "question": "Where is AcroCare located?",
+    "answer": "AcroCare (student counselling) is on Block 1, 3rd floor.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra7",
+    "question": "Where is the canteen?",
+    "answer": "The canteen is located in front of the basketball court.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra8",
+    "question": "Where is Kamalprabha auditorium?",
+    "answer": "Kamalprabha auditorium is located in the BPharma building.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "infra9",
+    "question": "Where is Dhairyaprabha auditorium?",
+    "answer": "Dhairyaprabha auditorium is located in the MBA block.",
+    "category": "infrastructure"
+  },
+  {
+    "id": "hostel1",
+    "question": "Does the college provide hostel facilities?",
+    "answer": "No, Acropolis Institute does not provide hostel facilities. Would you like suggestions for nearby hostels?",
+    "category": "hostel",
+    "action": "Stanza living at Palasia Indore , Fees 20,000 Rs(approx.) , Spoc : Yukti Baldua 8349571842"
+  },
+  {
+    "id": "hostel2",
+    "question": "Suggest some hostels near the college.",
+    "answer": "Here are some nearby hostels:\n\n1. [Siya Bhavan, Pardeshipura, Siya Purohit 8795621456, 25000]\n2. [Tulja Darpan, Vijay Nagar, Tulja Vishwakarma  7582037432, 15000]\n3. [Yuvi's Mansion, Airport Road, Yuvi  6253459752, 30000]",
+    "category": "hostel"
+  },
+  {
+    "id": "bus_60feet_1",
+    "question": "Which buses are available from 60 Feet Road?",
+    "answer": "The following buses serve 60 Feet Road:\n\n1. Bus No: G40\n   - Arrival: 7:05 AM (1st shift), 9:05 AM (2nd shift)\n   - Stop: 60 Feet Bus Stop\n   - Driver: Sandeep\n   - Contact: 9821048743\n\n2. [only one bus is available here]",
+    "location": "60 Feet Road",
+    "category": "transport"
+  },
+  {
+    "id": "bus_catroad_1",
+    "question": "I live near Palasia Road. Which buses can I take?",
+    "answer": "Buses serving Palasia Road:\n\n1. Bus No: G45\n   - Arrival: 7:45 AM, 9:45 AM\n   - Stop: Palasia Square\n   - Driver: Yogendra Kurmi\n   - Contact: 8796542308\n\n",
+    "location": "Palasia",
+    "category": "transport"
+  },
+  {
+    "id": "bus_vijaynagar_1",
+    "question": "Are there buses from vijaynagar?",
+    "answer": "Yes, buses from vijaynagar include:\n\n1. Bus No: G26\n   - Arrival: 7:30 AM, 9:30 AM\n   - Stop: c21 mall\n   - Driver: Nihal \n   - Contact: [4562078956]",
+    "location": "vijaynagar",
+    "category": "transport"
+  },
+  {
+    "id": "bus_additional",
+    "question": "Show me other bus routes near my location.",
+    "answer": "Please enter your location to see available buses. You can also explore:\n\n1. [Add Bus No, Stop, Time, Driver, Contact]\n2. [Add Bus No, Stop, Time, Driver, Contact]",
+    "location": "dynamic",
+    "category": "transport"
+  },
+  {
+    "id": "placement1",
+    "question": "How can I get placement or internship support?",
+    "answer": "Please contact the Career Development Cell (CDC) for placement and internship support.",
+    "category": "career"
+  },
+  {
+    "id": "placement2",
+    "question": "Show me upcoming campus drives.",
+    "answer": "Here are some upcoming drives:\n\n1. Bajaj Finserv – Open to all domains – 12 LPA\n2. [YB Pvt Limited, AI developer, 12 LPA]\n3. [TV Colabs, Cloud Associate, 11 LPA]",
+    "category": "career",
+    "action": "login_required"
+  },
+  {
+    "id": "clubs1",
+    "question": "What student clubs are available?",
+    "answer": "Active clubs include AWS Student Club, Salesforce Club, AI Club, and Hobby Club.",
+    "category": "clubs"
+  },
+  {
+    "id": "events1",
+    "question": "What events are held at Acropolis?",
+    "answer": "Major events include TechFest (Techostav) and Ardor Cultural Fest.",
+    "category": "events"
+  },
+  {
+    "id": "personal1",
+    "question": "What is my attendance?",
+    "answer": "Please sign up and log in to view personalized data like attendance.",
+    "category": "personal",
+    "action": "login_required"
+  },
+  {
+    "id": "personal2",
+    "question": "Show me my result.",
+    "answer": "Please log in to access your result from the student database.",
+    "category": "personal",
+    "action": "login_required"
+  },
+  {
+    "id": "timetable1",
+    "question": "Show me timetable for 2nd Year IT Section 2.",
+    "answer": "Core subjects:\n- Mathematics 3 (Prof Nitu, XXXXXXXXXX, xxxxacropolis.in)\n- Computer Architecture (Prof Varsha, XXXXXXXXXX, xxxxacropolis.in)\n- Analysis and Design of Algorithm (Prof Manish Vyas, XXXXXXXXXX, xxxxacropolis.in)\n- Analog and Digital Communication (Prof Minakshi Halder, XXXXXXXXXX, xxxxacropolis.in)\n- DBMS (Prof Nitin Kulkarni, XXXXXXXXXX, xxxxacropolis.in)\n- Open Source (Prof Pawan K Gupta, XXXXXXXXXX, xxxxacropolis.in)",
+    "category": "timetable",
+    "action": "login_required"
+  },
+  {
+    "id": "timetable2",
+    "question": "Show me timetable for 3rd Year IT Section 1.",
+    "answer": "Core Subjects:\n- Operating System (Prof Manish Vyas , xxxxxxxxxx, xxxxacropolis.in)\n-  Computer Network (Prof Mayank Bhatt , xxxxxxxxxx , xxxxxacropolis.in)\n- Object Oriented Analysis and Design (Prof Pawan K Gupta , xxxxxxxxxx , xxxxxacropolis.in)\n- Artifical Intelligence (Prof Monika Chaudhary , xxxxxxxxxx, xxxxxxacropolis.in) ",
+    "category": "timetable",
+    "action": "login_required"
+  }
+]
