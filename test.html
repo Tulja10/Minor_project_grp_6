@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FAQ Bot Test</title>
+</head>
+<body>
+  <h2>Ask a Question</h2>
+  <form id="faqForm">
+    <input type="text" id="question" placeholder="Type your question..." size="50">
+    <button type="submit">Submit</button>
+  </form>
+  <p id="response"></p>
+
+  <script>
+    document.getElementById("faqForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const question = document.getElementById("question").value;
+
+      fetch("http://127.0.0.1:5000/faq", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("response").innerText = "Answer: " + data.answer;
+      })
+      .catch(err => {
+        document.getElementById("response").innerText = "Error: " + err;
+      });
+    });
+  </script>
+</body>
+</html>
