@@ -1,23 +1,29 @@
 𝗠𝗶𝗻𝗼𝗿_𝗽𝗿𝗼𝗷𝗲𝗰𝘁_𝗴𝗿𝗽_𝟲
+
 AI powered student assistance chatbot featuring 24/7 assistance to student queries.
 
 ## 🔧 Setup Instructions
 
 1. Clone the repository:
 git clone https://github.com/Tulja10/Minor_project_grp_6.git
+
 cd Minor_project_grp_6
 
-2. Create a virtual environment:
+3. Create a virtual environment:
 python -m venv venv
 venv\Scripts\activate # Windows
 
-3. Install dependencies:  pip install -r requirements.txt
+python3 -m venv venv
+source venv/bin/activate #macos
 
-4. Ingest FAQs: python db.py
 
-5. Run the flask api : python app.py
+5. Install dependencies:  pip install -r requirements.txt #same for windows and macos
 
-6. Test in broswer :
+6. Ingest FAQs: python db.py
+
+7. Run the flask api : python app.py
+
+8. Test in broswer :
    i. Open 'test.html'
    ii. Ask any question from FAQ
 
