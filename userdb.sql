@@ -4,7 +4,8 @@ SHOW databases;
 
 -- Users table
 CREATE TABLE User(user_id INT PRIMARY KEY AUTO_INCREMENT , 
-name VARCHAR(25), email VARCHAR(50) UNIQUE NOT NULL, hashed_psswd VARCHAR(15) , created_at DATE DEFAULT (CURRENT_DATE));
+    name VARCHAR(25), email VARCHAR(50) UNIQUE NOT NULL, hashed_psswd VARCHAR(15) , 
+    created_at DATE DEFAULT (CURRENT_DATE), role ENUM('student','admin') DEFAULT 'student');
 ALTER TABLE User MODIFY COLUMN hashed_psswd VARCHAR(255);
 
 -- Testing users table with dummy data
