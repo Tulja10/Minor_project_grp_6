@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student FAQ Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<script>
+    console.log("INLINE JS WORKING");
+</script>
+
+
+<body>
+  <div id="status-bar" style="display:none;"></div>
+  <div id="sidebar">
+    <div id="sidebar-header">
+      <img src="https://static.vecteezy.com/system/resources/previews/007/225/199/non_2x/robot-chat-bot-concept-illustration-vector.jpg" alt="Logo" id="sidebar-logo">
+      <h2>AcroBot: Apka Apna College Guide...!!</h2>
+    </div>
+
+    <div id="auth-container">
+      <!-- Signup -->
+      <div id="signup-form" style="display: none;">
+        <h2>Sign Up</h2>
+        <!-- NOTE: backend expects name/email/password; use email not username -->
+        <input type="text" id="signup-name" placeholder="Full name">
+        <input type="email" id="signup-email" placeholder="Email">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button id="signup-btn">Sign Up</button>
+        <p>Already have an account? <a href="#" id="goto-login">Login</a></p>
+      </div>
+
+      <!-- Login -->
+      <div id="login-form">
+        <h2>Login</h2>
+        <input type="email" id="login-email" placeholder="Email">
+        <input type="password" id="login-password" placeholder="Password">
+        <button id="login-btn">Login</button>
+        <p>Don't have an account? <a href="#" id="goto-signup">Sign Up</a></p>
+      </div>
+
+      <div id="user-info" style="display:none;">
+        <div id="username-display"></div>
+        <button id="logout-btn">Logout</button>
+      </div>
+    </div>
+
+    <button id="history-button"><i class="fas fa-history"></i> View chat history</button>
+    <!--c start-->
+    <div id="admin-panel" style="display:none; margin-top:15px;">
+    <h3>Admin: Upload FAQs</h3>
+    <input type="file" id="faq-file-input" accept=".json" style="width:100%; margin-bottom:10px;">
+    <button id="upload-faq-btn" style="margin-top:8px;">Upload FAQs File</button>
+    <small style="color:#ccc;">Upload a JSON file containing FAQs.</small>
+    <hr style="margin:15px 0; border-color:#444;">
+    <h3>Search FAQs</h3>
+    <input id="faq-search-box" type="text" placeholder="Search question...">
+    <div id="faq-search-results"
+     style="display:none; margin-top:10px; color:white; padding:0; border:none;">
+    </div>
+
+    </div>
+  </div>
+
+  <div id="main-content">
+    <div id="chat-container">
+      <div id="chat-header">
+        <span id="chatbot-title">Student FAQ Chatbot</span>
+        <div id="topic-buttons">
+          <button class="quick-btn">24x7 help</button>
+          <button class="quick-btn">Campus info</button>
+          <button class="quick-btn">Transport</button>
+          <button class="quick-btn">Fees & Scholarships</button>
+        </div>
+      </div>
+
+      <div id="chat-description">
+        Get instant answers about your campus: infrastructure, transport, fees, scholarships, placements, clubs and events.
+      </div>
+      <button id="back-button" style="display:none;">⬅ Back to Chat</button>
+      <div id="chat-history" aria-live="polite"></div>
+
+      <div id="chat-input-area">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button id="send-btn">Send</button>
+      </div>
+
+      <div id="suggestion-area">
+        <p>Try these example questions:</p>
+        <div class="suggestion-buttons">
+          <button class="suggestion">Where is the library?</button>
+          <button class="suggestion">Which buses are available from 60 Feet Road?</button>
+          <button class="suggestion">What is my attendance?</button>
+          <button class="suggestion">What is the annual fee structure for B.Tech IT?</button>
+          <button class="suggestion">Show me my result.</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
