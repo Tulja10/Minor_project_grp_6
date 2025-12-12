@@ -146,5 +146,36 @@
     "answer": "Core Subjects:\n- Operating System (Prof Manish Vyas , xxxxxxxxxx, xxxxacropolis.in)\n-  Computer Network (Prof Mayank Bhatt , xxxxxxxxxx , xxxxxacropolis.in)\n- Object Oriented Analysis and Design (Prof Pawan K Gupta , xxxxxxxxxx , xxxxxacropolis.in)\n- Artifical Intelligence (Prof Monika Chaudhary , xxxxxxxxxx, xxxxxxacropolis.in) ",
     "category": "timetable",
     "action": "login_required"
+  },
+  {
+    "id": "fees_btech_it",
+    "question": "What is the annual fee structure for B.Tech IT?",
+    "answer": "The annual fee for B.Tech IT (2nd, 3rd, and 4th year) is Rs 1,20,000. Breakdown:\n- Tuition Fees: Rs 73,600\n- Transport Fees: Rs 15,000\n- E-Cell Fees: Rs 500\n- Development Fees: Rs 28,400\n- Miscellaneous:\n   - Employee Skill Fees: Rs 1,000\n   - TSDC Fees: Rs 1,500",
+    "category": "fees"
+  },
+  {
+    "id": "scholarship_nsp_general",
+    "question": "Are there any scholarships available for general category students?",
+    "answer": "Yes, the NSP (National Scholarship Portal) Government Scheme is available for general category students. Eligibility:\n- Marks: 60% and above\n- Family income: Less than Rs 3,00,000 per annum\n- Category: General\n\nAmount awarded: Fixed Rs 50,000 per annum\n\nApplication process:\n- Apply through the official NSP online portal\n- Submit hardcopy of required documents at Window 3 of the college reception\n\nDeadline: October 2025",
+    "category": "scholarship",
+    "action": "login_optional",
+    "contact": "Fees Section, Reception Area"
+  },
+  {
+    "id": "scholarship_mptaas_scst",
+    "question": "Are there scholarships available for SC/ST students?",
+    "answer": "Yes, SC/ST students can apply through the MPTAAS portal for various government scholarships. Eligibility and amount may vary based on category and income. Please visit the MPTAAS portal for details.",
+    "category": "scholarship",
+    "contact": "Fees Section, Reception Area"
+  },
+  {
+    "id": "infra_xerox_1",
+    "question": "Where can I find the xerox facility?",
+    "answer": "The xerox facility is located at Block 1, ground floor near the reception area."
+  },
+  {
+    "id": "infra_cdc_2",
+    "question": "Where is the CDC located?",
+    "answer": "The CDC is located on the ground floor of Block 3."
   }
 ]
