@@ -11,7 +11,10 @@
     console.log("INLINE JS WORKING");
 </script>
 
-
+<div id="image-modal" class="image-modal">
+    <span id="modal-close">&times;</span>
+    <img id="modal-img">
+</div>
 <body>
   <div id="status-bar" style="display:none;"></div>
   <div id="sidebar">
@@ -55,6 +58,9 @@
     <button id="upload-faq-btn" style="margin-top:8px;">Upload FAQs File</button>
     <small style="color:#ccc;">Upload a JSON file containing FAQs.</small>
     <hr style="margin:15px 0; border-color:#444;">
+    <h3>Review Bad Responses</h3>
+    <button id="load-feedback-btn">Show Bad Responses</button>
+    <div id="feedback-review"></div>
     <h3>Search FAQs</h3>
     <input id="faq-search-box" type="text" placeholder="Search question...">
     <div id="faq-search-results"

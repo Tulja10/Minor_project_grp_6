@@ -31,12 +31,20 @@ except json.JSONDecodeError:
     print("❌ Error: faqs.json contains invalid JSON")
     exit(1)
 
+client.delete_collection("student_faqs")
+collection = client.get_or_create_collection(
+    name="student_faqs",
+    embedding_function=embed_fn
+)
 # ✅ Embed and store FAQs
 for faq in faqs:
     collection.add(
-        documents=[faq["question"]],
-        metadatas=[{"answer": faq["answer"]}],
-        ids=[faq["id"]]
-    )
+    documents=[faq["question"]],
+    metadatas=[{
+        "answer": faq["answer"],
+        "image": faq.get("image", "")
+    }],
+    ids=[faq["id"]]
+)
 
 print("✅ FAQ data embedded and stored in ChromaDB")

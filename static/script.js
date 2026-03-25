@@ -10,8 +10,125 @@ const chatHistoryDiv = document.getElementById("chat-history");
 const userInfo = document.getElementById("user-info");
 const faqSearchBox = document.getElementById("faq-search-box");
 const faqSearchResults = document.getElementById("faq-search-results");
+const feedbackBox = document.getElementById("feedback-review");
+const loadFeedbackBtn = document.getElementById("load-feedback-btn");
+const modal = document.getElementById("image-modal");
+const modalClose = document.getElementById("modal-close");
 
+if(modalClose){
+    modalClose.onclick = () => {
+        modal.style.display = "none";
+    };
+}
 
+if(modal){
+    modal.onclick = (e) => {
+        if(e.target === modal){
+            modal.style.display = "none";
+        }
+    };
+}
+
+let feedbackVisible = false;
+
+if (loadFeedbackBtn) {
+
+    loadFeedbackBtn.onclick = async () => {
+
+        // hide if already visible
+        if (feedbackVisible) {
+            feedbackBox.innerHTML = "";
+            loadFeedbackBtn.textContent = "Show Bad Responses";
+            feedbackVisible = false;
+            return;
+        }
+
+        const res = await fetch(
+            `${API_BASE}/admin/bad_feedback?email=${currentUser.email}`
+        );
+
+        const data = await res.json();
+
+        feedbackBox.innerHTML = "";
+
+        data.items.forEach(row => {
+
+            const div = document.createElement("div");
+
+            div.style.borderBottom = "1px solid #444";
+            div.style.padding = "8px";
+            div.style.marginBottom = "10px";
+
+            div.innerHTML = `
+                <b>Question:</b> ${row.ques}<br>
+                <b>Bot Answer:</b> ${row.ans}<br>
+
+                <textarea class="faq-answer-box"
+                placeholder="Write improved answer here"
+                style="
+                    width:100%;
+                    margin-top:6px;
+                    background:#1e1e1e;
+                    border:1px solid #444;
+                    color:white;
+                    padding:6px;
+                    border-radius:4px;
+                "></textarea>
+
+                <button class="faq-add-btn"
+                style="margin-top:6px">
+                    Add to FAQ
+                </button>
+            `;
+
+            const btn = div.querySelector(".faq-add-btn");
+
+            btn.onclick = () => convertToFaq(row.ques, div);
+
+            feedbackBox.appendChild(div);
+        });
+
+        loadFeedbackBtn.textContent = "Hide Bad Responses";
+        feedbackVisible = true;
+    };
+}
+window.convertToFaq = async function(question, container){
+
+    const textarea = container.querySelector(".faq-answer-box");
+    const answer = textarea.value.trim();
+
+    if(!answer){
+        showStatus("Please write improved answer first", "#d9534f");
+        return;
+    }
+
+    const newFaq = [{
+        id: "faq_" + Date.now(),
+        question: question,
+        answer: answer
+    }];
+
+    const res = await fetch(`${API_BASE}/admin/upload_faqs`, {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            admin_email: currentUser.email,
+            faqs: newFaq
+        })
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+        showStatus("FAQ added successfully!");
+        container.remove();
+    }
+    else{
+        showStatus(data.error || "Failed to add FAQ", "#d9534f");
+    }
+}
 /* ===========================
       UI SWITCHING
 =========================== */
@@ -154,6 +271,7 @@ async function sendMessage() {
 
     render(text, "user");
     input.value = "";
+    showTyping();
 
     const body = { question: text };
     if (currentUser) body.email = currentUser.email;
@@ -164,10 +282,12 @@ async function sendMessage() {
         body: JSON.stringify(body),
     });
 
-    const data = await res.json();
+    
 
+    const data = await res.json();
+    removeTyping();
     if (res.ok) {
-        render(data.answer, "bot");
+        render(data.answer, "bot", data.chat_id, data.image);
     } else {
         render(data.error, "bot");
     }
@@ -176,13 +296,88 @@ async function sendMessage() {
 /* ===========================
       CHAT RENDERING
 =========================== */
-function render(msg, role) {
+function render(msg, role, chatId=null, image=null) {
+
     const div = document.createElement("div");
     div.className = `message ${role}-message`;
-    div.textContent = msg;
+
+    const text = document.createElement("div");
+    text.innerText = msg;
+    div.appendChild(text);
+
+    if(image){
+
+    const img = document.createElement("img");
+
+    img.src = `/static/${image}`;
+    img.style.width = "100%";
+    img.style.maxWidth = "250px";
+    img.style.marginTop = "8px";
+    img.style.borderRadius = "6px";
+    img.style.cursor = "zoom-in";
+
+    img.onclick = () => {
+        const modal = document.getElementById("image-modal");
+        const modalImg = document.getElementById("modal-img");
+
+        modal.style.display = "flex";
+        modalImg.src = img.src;
+    };
+
+    div.appendChild(img);
+}
+
+    chatHistoryDiv.appendChild(div);
+
+    if (role === "bot" && chatId) {
+
+        const feedback = document.createElement("div");
+        feedback.style.marginTop = "5px";
+
+        feedback.innerHTML = `
+            <span style="cursor:pointer">👍</span>
+            <span style="cursor:pointer;margin-left:10px">👎</span>
+        `;
+
+        const up = feedback.children[0];
+        const down = feedback.children[1];
+
+        up.onclick = () => {
+            sendFeedback(chatId,1);
+            feedback.remove();
+        };
+
+        down.onclick = () => {
+            sendFeedback(chatId,0);
+            feedback.remove();
+        };
+
+        div.appendChild(feedback);
+    }
+
+    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+}
+function showTyping() {
+    const div = document.createElement("div");
+    div.className = "message bot-message typing";
+    div.id = "typing-indicator";
+
+    div.innerHTML = `
+        <span></span>
+        <span></span>
+        <span></span>
+    `;
+
     chatHistoryDiv.appendChild(div);
     chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
 }
+
+function removeTyping() {
+    const typing = document.getElementById("typing-indicator");
+    if (typing) typing.remove();
+}
+
+
 
 /* ===========================
       LOAD HISTORY
@@ -197,7 +392,7 @@ async function loadHistory() {
 
     (data.chats || []).forEach((c) => {
         render(c.question, "user");
-        render(c.answer, "bot");
+        render(c.answer, "bot", c.chat_id);
     });
 }
 // history button
@@ -300,6 +495,7 @@ if (uploadFaqBtn) {
     }
     };
 }
+
 /* ===========================
       ADMIN FAQ SEARCH
 =========================== */
@@ -362,5 +558,28 @@ if (faqSearchBox && faqSearchResults) {
         `).join("");
     });
 }
+async function sendFeedback(chatId,value){
 
+    await fetch(`${API_BASE}/feedback`,{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            chat_id:chatId,
+            feedback:value
+        })
+    });
+
+    showStatus("Feedback saved!");
+}
 });
+// autofill faq upload form
+function fillFaq(question){
+
+    const faqBox = document.getElementById("faq-search-box");
+
+    faqBox.value = question;
+
+    showStatus("Admin can now add improved FAQ");
+}
