@@ -134,17 +134,24 @@
     "action": "login_required"
   },
   {
-    "id": "timetable1",
-    "question": "Show me timetable for 2nd Year IT Section 2.",
-    "answer": "Core subjects:\n- Mathematics 3 (Prof Nitu, XXXXXXXXXX, xxxxacropolis.in)\n- Computer Architecture (Prof Varsha, XXXXXXXXXX, xxxxacropolis.in)\n- Analysis and Design of Algorithm (Prof Manish Vyas, XXXXXXXXXX, xxxxacropolis.in)\n- Analog and Digital Communication (Prof Minakshi Halder, XXXXXXXXXX, xxxxacropolis.in)\n- DBMS (Prof Nitin Kulkarni, XXXXXXXXXX, xxxxacropolis.in)\n- Open Source (Prof Pawan K Gupta, XXXXXXXXXX, xxxxacropolis.in)",
-    "category": "timetable",
+    "id": "timetable_it2_sem6",
+    "question": "IT2 6th sem timetable",
+    "answer": "Here is the timetable for IT2 6th semester.",
+    "image": "it2_sem6.jpeg",
     "action": "login_required"
   },
   {
-    "id": "timetable2",
-    "question": "Show me timetable for 3rd Year IT Section 1.",
-    "answer": "Core Subjects:\n- Operating System (Prof Manish Vyas , xxxxxxxxxx, xxxxacropolis.in)\n-  Computer Network (Prof Mayank Bhatt , xxxxxxxxxx , xxxxxacropolis.in)\n- Object Oriented Analysis and Design (Prof Pawan K Gupta , xxxxxxxxxx , xxxxxacropolis.in)\n- Artifical Intelligence (Prof Monika Chaudhary , xxxxxxxxxx, xxxxxxacropolis.in) ",
-    "category": "timetable",
+    "id": "timetable_cs4_sem5",
+    "question": "CS4 5th sem timetable",
+    "answer": "Here is the timetable for CS4 5th semester.",
+    "image": "cs4_sem5.png",
+    "action": "login_required"
+  },
+  {
+    "id": "timetable_aiml2_sem6",
+    "question": "AIML2 6th sem timetable",
+    "answer": "Here is the timetable for AIML2 6th semester.",
+    "image": "aiml2_sem6.png",
     "action": "login_required"
   },
   {

@@ -23,3 +23,6 @@ percentage INT , last_updated DATE DEFAULT (CURRENT_DATE), FOREIGN KEY (user_id)
 CREATE TABLE chat_history( chat_id INT PRIMARY KEY AUTO_INCREMENT, user_id INT NOT NULL,
  ques TEXT NOT NULL, ans TEXT NOT NULL, context TEXT, timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (user_id) REFERENCES user(user_id));
+
+ALTER TABLE chat_history 
+ADD COLUMN feedback INT DEFAULT NULL;

@@ -62,6 +62,32 @@ if CHROMADB_AVAILABLE:
         print("Chromadb init failed:", e)
         collection = None
 
+def load_faqs_to_vector_db():
+
+    if collection is None:
+        return
+
+    if not FAQS_FILE_PATH.exists():
+        return
+
+    data = json.loads(FAQS_FILE_PATH.read_text())
+
+    try:
+        collection.delete(where={})
+    except:
+        pass
+
+    docs = [f["question"] for f in data]
+    metas = [{"answer": f["answer"], "image": f.get("image","")} for f in data]
+    ids = [f["id"] for f in data]
+
+    collection.add(
+        documents=docs,
+        metadatas=metas,
+        ids=ids
+    )
+
+    print("FAQs loaded into ChromaDB")
 # ------------------------
 # Helper: LLM integration placeholder
 # Returns: (answer_text, context_str)
@@ -70,7 +96,6 @@ def call_your_llm(prompt: str):
     api_url = os.getenv('LLM_API_URL', "http://127.0.0.1:5001/api/v1/generate")
     payload = {
     "prompt": prompt,
-    "max_length": 64,
     "max_new_tokens": 64,
     "temperature": 0.6,
     "top_k": 50,
@@ -240,7 +265,12 @@ def admin_upload_faqs():
         if q.lower() in existing_questions:
             continue
 
-        existing_by_id[fid] = {"id": fid, "question": q, "answer": a}
+        existing_by_id[fid] = {
+            "id": fid,
+            "question": q,
+            "answer": a,
+            "image": faq.get("image", "")
+        }
         added_count += 1
 
     # Final merged list
@@ -264,7 +294,7 @@ def admin_upload_faqs():
             pass
 
         docs = [f["question"] for f in final_faqs]
-        metas = [{"answer": f["answer"]} for f in final_faqs]
+        metas = [{"answer": f["answer"],"image": f.get("image", "")} for f in final_faqs]
         ids = [f["id"] for f in final_faqs]
 
         collection.add(documents=docs, metadatas=metas, ids=ids)
@@ -390,7 +420,10 @@ def chat():
 
     if not question:
         return jsonify({'error': 'question required'}), 400
-
+    if len(question.strip()) < 3:
+        return jsonify({
+        "answer": "Please ask a valid question related to campus services."
+    })
     q_lower = question.lower()
 
     # ============= PERSONAL QUERIES =============
@@ -409,17 +442,43 @@ def chat():
     else:
         # ============= GENERAL QUERY =============
         context_passage = ""
+        image_path = ""
 
         if collection is not None:
             try:
-                vector_results = collection.query(query_texts=[question], n_results=1)
+                vector_results = collection.query(query_texts=[question], n_results=3)
 
+                ids = vector_results["ids"][0]
+                metas = vector_results["metadatas"][0]
+                distances = vector_results["distances"][0]
+
+                # pick best result
+                best_index = distances.index(min(distances))
+                best_distance = distances[best_index]
+
+                # reject weak match
+                if best_distance > 0.3:
+                    return jsonify({
+                        "question": question,
+                        "answer": "Sorry, I couldn't find information related to that question. Please ask about campus transport, facilities, fees, results, or events.",
+                        "context": "no_match",
+                        "chat_id": None,
+                        "image": ""
+                    })
+
+                meta = metas[best_index]
+                raw_context = meta.get("answer", "")
+                image_path = meta.get("image", "")
                 try:
-                    raw_context = vector_results['metadatas'][0][0].get('answer', '')
+                    meta = vector_results['metadatas'][0][0]
+                    raw_context = meta.get("answer","")
+                    image_path = meta.get("image","")
                 except Exception:
                     raw_context = ""
+                    image_path = ""
             except Exception:
                 raw_context = ""
+                image_path = ""
 
         else:
             raw_context = ""
@@ -436,33 +495,40 @@ def chat():
 
         context_passage = clean_context(raw_context)
 
-        # 2️⃣ FORMAT PROMPT (strict)
-        llm_input = (
-        "You are a helpful assistant. "
-        "Always answer in clear ENGLISH only, even if the question is asked in Hindi or any other language. "
-        "Translate internally if required but never show translation. "
-        "Answer ONLY the final user question in 2–3 sentences. "
-        "Do NOT repeat the question. "
-        "Do NOT ask new questions. "
-        "Do NOT include multiple answers. "
-        "Do NOT output Q/A format. "
-        "Do NOT explain what words mean. "
-        "Do NOT add notes like '(konsa means bus)'. "
-        "Do NOT include parentheses unless absolutely necessary. "
-        "Keep the answer short, direct, and factual.\n\n"
-        f"Context (summarized): {context_passage}\n\n"
-        f"User question: {question}\n\n"
-        "Final answer in English only:"
-        )
+        # FAST FAQ RESPONSE (skip LLM)
+        if context_passage and len(context_passage) > 0:
+            answer = context_passage
+            context = "FAQ match"
+        else:
+
+            # 2️⃣ FORMAT PROMPT (strict)
+            llm_input = (
+                "You are a helpful assistant. "
+                "Always answer in clear ENGLISH only, even if the question is asked in Hindi or any other language. "
+                "Translate internally if required but never show translation. "
+                "Answer ONLY the final user question in 2–3 sentences. "
+                "Do NOT repeat the question. "
+                "Do NOT ask new questions. "
+                "Do NOT include multiple answers. "
+                "Do NOT output Q/A format. "
+                "Do NOT explain what words mean. "
+                "Do NOT add notes like '(konsa means bus)'. "
+                "Do NOT include parentheses unless absolutely necessary. "
+                "Keep the answer short, direct, and factual.\n\n"
+                f"Context (summarized): {context_passage}\n\n"
+                f"User question: {question}\n\n"
+                "Final answer in English only:"
+            )
 
 
-        # 3️⃣ CALL LLM
-        answer, context = call_your_llm(llm_input)
+            # 3️⃣ CALL LLM
+            answer, context = call_your_llm(llm_input)
 
-        # 4️⃣ CLEAN ANY REMAINING JUNK GENERATED
-        for stop in ["Context:", "User question:", "Question:", "Answer:"]:
-            if stop in answer:
-                answer = answer.split(stop)[0].strip()
+            # 4️⃣ CLEAN ANY REMAINING JUNK GENERATED
+            for stop in ["Context:", "User question:", "Question:", "Answer:"]:
+                if stop in answer:
+                    answer = answer.split(stop)[0].strip()
+
 
     # ============= SAVE TO HISTORY =============
     user_id = None
@@ -475,26 +541,84 @@ def chat():
         finally:
             cursor.close()
 
+    chat_id = None
+
     try:
         cursor = userDB.cursor()
         try:
             if user_id is not None:
-                cursor.execute("INSERT INTO chat_history (user_id, ques, ans, context) VALUES (%s, %s, %s, %s)",
-                (user_id, question, answer, context)
+                cursor.execute(
+                    "INSERT INTO chat_history (user_id, ques, ans, context) VALUES (%s,%s,%s,%s)",
+                    (user_id, question, answer, context)
                 )
+
+                chat_id = cursor.lastrowid
 
             userDB.commit()
         finally:
             cursor.close()
+
     except Exception as e:
         print("Warning: failed to store chat history:", e)
 
     return jsonify({
-        'question': question,
-        'answer': answer,
-        'context': context
+        "question": question,
+        "answer": answer,
+        "context": context,
+        "chat_id": chat_id,
+        "image": image_path
     })
 
+@app.route("/admin/bad_feedback", methods=["GET"])
+def get_bad_feedback():
+
+    admin_email = request.args.get("email")
+
+    if not is_admin(admin_email):
+        return jsonify({"error":"admin only"}),403
+
+    cursor = userDB.cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT chat_id, ques, ans, timestamp
+            FROM chat_history
+            WHERE feedback = 0 AND context != 'Queried result' AND context != 'Queried attendance'
+            ORDER BY timestamp DESC
+            LIMIT 50
+        """)
+
+        rows = cursor.fetchall()
+
+    finally:
+        cursor.close()
+
+    return jsonify({"items": rows})
+@app.route("/feedback", methods=["POST"])
+def feedback():
+
+    data = request.get_json()
+
+    chat_id = data.get("chat_id")
+    value = data.get("feedback")
+
+    if chat_id is None:
+        return jsonify({"error": "chat_id required"}), 400
+
+    cursor = userDB.cursor()
+
+    try:
+        cursor.execute(
+            "UPDATE chat_history SET feedback=%s WHERE chat_id=%s",
+            (value, chat_id)
+        )
+        userDB.commit()
+    finally:
+        cursor.close()
+
+    return jsonify({"message": "Feedback saved"})
+     
 if __name__ == "__main__":
+    load_faqs_to_vector_db()
     app.run(host="0.0.0.0", port=5000, debug=True)
 
