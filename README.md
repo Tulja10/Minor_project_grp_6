@@ -1,47 +1,57 @@
-𝗠𝗶𝗻𝗼𝗿_𝗽𝗿𝗼𝗷𝗲𝗰𝘁_𝗴𝗿𝗽_𝟲
+## Student FAQ Chatbot
 
-AI powered student assistance chatbot featuring 24/7 assistance to student queries.
+A smart campus chatbot that answers queries using vector search (ChromaDB), MySQL (for user data), and LLM fallback (Mistral 7B).
+Supports personalized answers, admin FAQ upload, and image-based responses (timetables).
 
-## 🔧 Setup Instructions
+## Features
+Semantic FAQ search using ChromaDB
+Personalized data (attendance, results) via MySQL
+LLM fallback for unknown queries
+Image responses (timetables)
+Admin panel to upload/update FAQs
+Feedback system 
 
-1. Clone the repository:
-git clone https://github.com/Tulja10/Minor_project_grp_6.git
+## Setup Instructions
+1. Clone the Repository
+git clone <your-repo-link>
+cd project
 
-cd Minor_project_grp_6
-
-3. Create a virtual environment:
+2. Create Virtual Environment
 python -m venv venv
-venv\Scripts\activate # Windows
+venv\Scripts\activate
 
-python3 -m venv venv
-source venv/bin/activate #macos
+3. Install Dependencies
+pip install flask flask-cors mysql-connector-python bcrypt chromadb sentence-transformers requests
 
+4. Setup MySQL Database
+Open MySQL and create a database named:
+user_db
+Import the schema file:
+userdb.sql
+Make sure MySQL server is running before starting the project
 
-5. Install dependencies:  pip install -r requirements.txt #same for windows and macos
+6. Load FAQs into Vector Database
+python db.py
 
-6. Ingest FAQs: python db.py
+Note:
+This step creates embeddings and stores them in ChromaDB
+Run this command every time you update faqs.json
 
-7. Run the flask api : python app.py
+6. Setup Local LLM (Mistral 7B)
+Download and install LM Studio:
+https://lmstudio.ai
+Open LM Studio and download:
+“Mistral 7B Instruct” model
+Start the local API server on port 5001
 
-8. Test in broswer :
-   i. Open 'test.html'
-   ii. Ask any question from FAQ
+Note:
+The project uses this API by default:
+http://127.0.0.1:5001/api/v1/generate
+(You can change this in app.py if needed)
 
+8. Run the Backend Server
+python app.py
 
-🧩𝗠𝗼𝗱𝘂𝗹𝗲 𝗕𝗿𝗲𝗮𝗸𝗱𝗼𝘄𝗻
-
- 🔹𝗬𝘂𝘃anshi – 𝗕𝗮𝗰𝗸𝗲𝗻𝗱 𝗟𝗲𝗮𝗱 & 𝗦𝗲𝗺𝗮𝗻𝘁𝗶𝗰 𝗦𝗲𝗮𝗿𝗰𝗵 𝗦𝘁𝗿𝗮𝘁𝗲𝗴𝗶𝘀𝘁
-
-- Built Flask API (`app.py`) with CORS support
-- Designed semantic search logic (`search.py`) using `all-mpnet-base-v2`
-- Embedded FAQs with ChromaDB (`db.py`)
-- Added fallback logic for unmatched queries
-- Created browser testing interface (`test.html`)
-- Structured repo for team onboarding
-
-> ✅ Status: Fully functional semantic search with fallback
-
----
-   
-
-
+8. Open the Application
+Open your browser and go to:
+http://localhost:5000
