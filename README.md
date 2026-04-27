@@ -4,11 +4,11 @@ A smart campus chatbot that answers queries using vector search (ChromaDB), MySQ
 Supports personalized answers, admin FAQ upload, and image-based responses (timetables).
 
 ## Features
-Semantic FAQ search using ChromaDB
-Personalized data (attendance, results) via MySQL
-LLM fallback for unknown queries
-Image responses (timetables)
-Admin panel to upload/update FAQs
+Semantic FAQ search using ChromaDB <br>
+Personalized data (attendance, results) via MySQL <br> 
+LLM fallback for unknown queries <br>
+Image responses (timetables) <br>
+Admin panel to upload/update FAQs <br>
 Feedback system 
 
 ## Setup Instructions
